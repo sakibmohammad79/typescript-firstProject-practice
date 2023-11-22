@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { studentServices } from './student.service';
 import StudentValidationSchema from './student.validationZod';
-
 //import studentValidationSchema from './student.validationJoi';
 
 const createStudent = async (req: Request, res: Response) => {
@@ -48,8 +47,12 @@ const getAllStudent = async (req: Request, res: Response) => {
       message: 'get all student successfully!',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    });
   }
 };
 
@@ -63,8 +66,31 @@ const getSingleStudent = async (req: Request, res: Response) => {
       message: 'single get successfully!',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    });
+  }
+};
+
+const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await studentServices.deleteStudentFromDB(studentId);
+
+    res.status(200).json({
+      success: true,
+      message: 'student delete successfully!',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    });
   }
 };
 
@@ -72,4 +98,5 @@ export const studentController = {
   createStudent,
   getAllStudent,
   getSingleStudent,
+  deleteStudent,
 };

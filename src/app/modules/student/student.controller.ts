@@ -74,7 +74,6 @@ const getSingleStudent = async (req: Request, res: Response) => {
     });
   }
 };
-
 const deleteStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;

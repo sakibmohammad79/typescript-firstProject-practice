@@ -9,7 +9,6 @@ import {
 } from './student.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
-import { boolean } from 'joi';
 
 const TuserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -211,6 +210,7 @@ studentSchema.virtual('fullName').get(function () {
 studentSchema.pre('save', async function (next) {
   // console.log(this, 'pre hook: the function exicute before save data');
   //hashing password
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
     user.password,

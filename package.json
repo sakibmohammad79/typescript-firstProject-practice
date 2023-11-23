@@ -2,7 +2,7 @@
   "name": "first-project",
   "version": "1.0.0",
   "description": "",
-  "main": "node index.js",
+  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start:prod": "node ./dist/server.js",

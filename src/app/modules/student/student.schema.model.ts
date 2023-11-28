@@ -7,8 +7,6 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
 
 const TuserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -95,11 +93,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       unique: true,
       trim: true,
     },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      trim: true,
-      maxlength: [20, 'password can not more than 20 characters'],
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'user Id is required'],
+      unique: true,
+      ref: 'User',
     },
     name: {
       type: TuserNameSchema,
@@ -178,17 +176,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Profile Image is required'],
       trim: true,
     },
-    isActive: {
-      type: String,
-      enum: {
-        values: ['active', 'blocked'],
-        message:
-          '{VALUE} is not valid. Status must be either "active" or "blocked".',
-      },
-      required: [true, 'Status is required'],
-      default: 'active',
-      trim: true,
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -204,26 +191,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 //vertal field added
 studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
-});
-
-//pre save middlewar/ hook
-studentSchema.pre('save', async function (next) {
-  // console.log(this, 'pre hook: the function exicute before save data');
-  //hashing password
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bycrypt_salt_rounds)
-  );
-  next();
-});
-
-//post save middlewar/ hook
-studentSchema.post('save', function (doc, next) {
-  // console.log(this, 'post hook: the function exicute after save data');
-  doc.password = '';
-  next();
 });
 
 //pre query middle hook
@@ -249,12 +216,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
-//creating custom instance method
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
 
 const Student = model<TStudent, StudentModel>('Student', studentSchema);
 

@@ -9,6 +9,7 @@ const userSchema = new Schema<TUser>(
     id: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -52,7 +53,6 @@ userSchema.pre('save', async function (next) {
 
 //post save middlewar/ hook
 userSchema.post('save', function (doc, next) {
-  // console.log(this, 'post hook: the function exicute after save data');
   doc.password = '';
   next();
 });

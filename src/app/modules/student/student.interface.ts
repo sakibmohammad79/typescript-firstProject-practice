@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 
 export type TGuardian = {
@@ -26,9 +27,9 @@ export type TStudent = {
   id: string;
   user: Types.ObjectId;
   name: TUserName;
-  gender: 'male' | 'female';
+  gender: 'male' | 'female' | 'other';
   contactNo: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   email: string;
   avatar?: string;
   emergencyContactNo: string;
@@ -38,6 +39,7 @@ export type TStudent = {
   guardian: TGuardian;
   localGuardian: TLocalGaurdian;
   profileImg?: string;
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 };
 
@@ -46,14 +48,3 @@ export type TStudent = {
 export interface StudentModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>;
 }
-
-//for creating instance --->
-// export type StudentMethods = {
-//   isUserExists(id: string): Promise<TStudent | null>;
-// };
-
-// export type StudentModel = Model<
-//   TStudent,
-//   Record<string, never>,
-//   StudentMethods
-// >;

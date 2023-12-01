@@ -105,7 +105,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
     gender: {
       enum: {
-        values: ['male', 'female'],
+        values: ['male', 'female', 'other'],
         message:
           '{VALUE} is not valid. Gender must be either "male" or "female".',
       },
@@ -119,7 +119,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       trim: true,
     },
     dateOfBirth: {
-      type: String,
+      type: Date,
       required: [true, 'Date of Birth is required'],
       trim: true,
     },
@@ -175,6 +175,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: String,
       required: [true, 'Profile Image is required'],
       trim: true,
+    },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
     },
     isDeleted: {
       type: Boolean,

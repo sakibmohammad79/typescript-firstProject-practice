@@ -8,7 +8,6 @@ import { AcademicDepartment } from '../academicDepartment/department.model';
 import { Course } from '../course/course.model';
 import { Faculty } from '../faculty/faculty.model';
 import { hasTimeConflict } from './offeredCourse.utils';
-import { TSemesterRegistration } from '../semesterRegistration/semesterRegistration.interface';
 import queryBuilder from '../../builder/queryBuilder';
 
 const createOfferedCourseIntoDB = async (payload: TOfferCourse) => {
@@ -195,9 +194,31 @@ const updateOfferedCourseInotDB = async (
   return result;
 };
 
+const deleteOfferedCourseFromDB = async (id: string) => {
+  //check if offered course exists
+  const isOfferedCourseExists = await OfferedCourse.findById(id);
+  if (!isOfferedCourseExists) {
+    throw new appError(httpStatus.NOT_FOUND, 'Offerd course not found!');
+  }
+  //check if requested offered course status is upcoming
+  const semesterRegistration = isOfferedCourseExists.semesterRegistration;
+  const semesterRegistrationStatus = await SemesterRegistration.findById(
+    semesterRegistration
+  );
+  if (semesterRegistrationStatus?.status !== 'UPCOMING') {
+    throw new appError(
+      httpStatus.NOT_FOUND,
+      `The offered course can not update! Because the semester ${semesterRegistrationStatus?.status}`
+    );
+  }
+  const result = await OfferedCourse.findByIdAndDelete(id);
+  return result;
+};
+
 export const offeredCourseServices = {
   createOfferedCourseIntoDB,
   getAllOfferedCourseFromDB,
   getSingleOfferedCourseFromDB,
   updateOfferedCourseInotDB,
+  deleteOfferedCourseFromDB,
 };

@@ -1,7 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendRespons';
-
 import { SemesterRegistrationServices } from './semesterRegistration.service';
 
 const createSemesterRegistration = catchAsync(async (req, res) => {
@@ -58,9 +57,23 @@ const updateSemesterRegistraion = catchAsync(async (req, res) => {
   });
 });
 
+const deleteSemesterRegistration = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result =
+    await SemesterRegistrationServices.deleteSemesterRegistrationFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Semester Registration is deleted successfully',
+    data: result,
+  });
+});
+
 export const semesterRegistraionController = {
   createSemesterRegistration,
   getAllSemesterRegistration,
   getSingleSemesterRegistration,
   updateSemesterRegistraion,
+  deleteSemesterRegistration,
 };

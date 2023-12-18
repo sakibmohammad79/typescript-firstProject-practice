@@ -67,7 +67,7 @@ const createStudneIntoDB = async (password: string, payload: TStudent) => {
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
-    throw new appError(404, 'Failed to delete student.');
+    throw new Error(error);
   }
 };
 

@@ -9,6 +9,7 @@ import { Course } from '../course/course.model';
 import { Faculty } from '../faculty/faculty.model';
 import { hasTimeConflict } from './offeredCourse.utils';
 import { TSemesterRegistration } from '../semesterRegistration/semesterRegistration.interface';
+import queryBuilder from '../../builder/queryBuilder';
 
 const createOfferedCourseIntoDB = async (payload: TOfferCourse) => {
   const {
@@ -121,21 +122,22 @@ const createOfferedCourseIntoDB = async (payload: TOfferCourse) => {
 };
 
 const getAllOfferedCourseFromDB = async (query: Record<string, unknown>) => {
-  //   const semesterRegistrationQuery = new queryBuilder(
-  //     SemesterRegistration.find().populate('academicSemester'),
-  //     query
-  //   )
-  //     .filter()
-  //     .sort()
-  //     .paginate()
-  //     .fields();
-  //   const result = await semesterRegistrationQuery.modelQuery;
-  //   return result;
+  const offeredCourseQuery = new queryBuilder(OfferedCourse.find(), query)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await offeredCourseQuery.modelQuery;
+  return result;
 };
 
 const getSingleOfferedCourseFromDB = async (id: string) => {
-  const result = await OfferedCourse.findById(id);
-  return result;
+  const offeredCourse = await OfferedCourse.findById(id);
+  if (!offeredCourse) {
+    throw new appError(httpStatus.BAD_REQUEST, 'Offered course not found!');
+  }
+  return offeredCourse;
 };
 
 const updateOfferedCourseInotDB = async (

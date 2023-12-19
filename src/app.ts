@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import globalErrorHandler from './app/middlewars/globalErrorHandler';
 import notFound from './app/middlewars/notFound';
 import router from './app/router';
@@ -10,7 +11,8 @@ const app: Application = express();
 
 //parsers
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:5173'] }));
+app.use(cookieParser());
 
 //application routes
 app.use('/api/v1', router);

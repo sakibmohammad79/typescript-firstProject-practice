@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TStudent } from '../student/student.interface';
 import { TUser } from './user.interface';
@@ -17,7 +18,8 @@ import { Admin } from '../admin/admin.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
 import { AcademicDepartment } from '../academicDepartment/department.model';
-import { verifyToken } from '../auth/auth.utils';
+
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinay';
 
 const createStudneIntoDB = async (password: string, payload: TStudent) => {
   // create a user object
@@ -47,6 +49,8 @@ const createStudneIntoDB = async (password: string, payload: TStudent) => {
 
     //set  generated id
     userData.id = await generatedStudentId(admissionSemester);
+
+    sendImageToCloudinary();
 
     // create a user (transaction 1) array
     const newUser = await User.create([userData], { session });
@@ -195,7 +199,7 @@ const getMe = async (userId: string, role: string) => {
 
   return data;
 };
-const changeStatus = async (id: stirng, payload: { status: string }) => {
+const changeStatus = async (id: string, payload: { status: string }) => {
   const result = await User.findByIdAndUpdate(id, payload, {
     new: true,
   });

@@ -2,7 +2,7 @@ import { UserServices } from './user.service';
 import httpStatus from 'http-status';
 import sendResponse from '../../utils/sendRespons';
 import catchAsync from '../../utils/catchAsync';
-import { appError } from '../../errors/appError';
+
 // import { userValidationSchema } from './user.validationZod';
 
 const createStudent = catchAsync(async (req, res) => {

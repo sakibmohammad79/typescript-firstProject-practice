@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import config from '../config';
+import multer from 'multer';
 
 export const sendImageToCloudinary = () => {
   cloudinary.config({
@@ -7,11 +8,6 @@ export const sendImageToCloudinary = () => {
     api_key: config.api_kay_cloudinary,
     api_secret: config.api_secret_cloudinary,
   });
-  //   cloudinary.config({
-  //     cloud_name: 'dm126uxmv',
-  //     api_key: '837489542416858',
-  //     api_secret: 'CjRNK1KL2gRpBpFVInwjlGZSAmk',
-  //   });
 
   cloudinary.uploader.upload(
     'https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg',
@@ -21,3 +17,15 @@ export const sendImageToCloudinary = () => {
     }
   );
 };
+
+export const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, process.cwd() + '/uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix);
+  },
+});
+
+export const upload = multer({ storage: storage });

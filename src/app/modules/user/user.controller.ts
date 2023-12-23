@@ -6,23 +6,29 @@ import catchAsync from '../../utils/catchAsync';
 // import { userValidationSchema } from './user.validationZod';
 
 const createStudent = catchAsync(async (req, res) => {
-  console.log('file', req.file);
-  console.log('data', req.body);
-  // const { password, student: studentData } = req.body;
+  const { password, student: studentData } = req.body;
 
-  // const result = await UserServices.createStudneIntoDB(password, studentData);
+  const result = await UserServices.createStudneIntoDB(
+    req.file,
+    password,
+    studentData
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'create a student successfully!',
-    data: null,
+    data: result,
   });
 });
 
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
 
-  const result = await UserServices.createFacultyIntoDB(password, facultyData);
+  const result = await UserServices.createFacultyIntoDB(
+    req.file,
+    password,
+    facultyData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -35,7 +41,11 @@ const createFaculty = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin: adminData } = req.body;
 
-  const result = await UserServices.createAdminIntoDB(password, adminData);
+  const result = await UserServices.createAdminIntoDB(
+    req.file,
+    password,
+    adminData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

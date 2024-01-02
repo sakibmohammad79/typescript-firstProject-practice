@@ -68,13 +68,14 @@ const enrolledCourseSchema = new Schema<TEnrolledCourse>({
   },
   courseMarks: {
     type: courseMarksSchema,
+    default: {},
   },
   grade: {
     type: String,
     enum: Grade,
     default: 'NA',
   },
-  greadPoints: {
+  gradePoints: {
     type: Number,
     max: 4,
     min: 0,

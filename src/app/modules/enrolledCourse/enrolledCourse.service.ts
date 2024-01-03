@@ -178,6 +178,10 @@ const updateEnrolledCourseMarksIntoDb = async (
     );
   }
 
+  const modifiedData: Record<string, number> = {
+    ...courseMarks,
+  };
+
   if (courseMarks?.finalTerm) {
     const { classTest1, midTerm, classTest2, finalTerm } =
       isCourseBeglongToFaculty.courseMarks;
@@ -195,9 +199,6 @@ const updateEnrolledCourseMarksIntoDb = async (
     modifiedData.isCompleted = true;
   }
 
-  const modifiedData: Record<string, number> = {
-    ...courseMarks,
-  };
   if (courseMarks && Object.keys(courseMarks).length) {
     for (const [key, value] of Object.entries(courseMarks)) {
       modifiedData[`courseMarks.${key}`] = value;

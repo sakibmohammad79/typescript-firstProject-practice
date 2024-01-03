@@ -8,6 +8,7 @@ import Student from '../student/student.schema.model';
 import mongoose from 'mongoose';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
 import { Course } from '../course/course.model';
+import { Faculty } from '../faculty/faculty.model';
 
 const createEnrolledCourseIntoDB = async (
   userId: string,
@@ -158,6 +159,40 @@ const updateEnrolledCourseMarksIntoDb = async (
   if (!isStudentExists) {
     throw new appError(httpStatus.NOT_FOUND, 'This student not found!');
   }
+
+  const faculty = await Faculty.findOne({ id: facultyId }, { _id: 1 });
+  if (!faculty) {
+    throw new appError(httpStatus.NOT_FOUND, 'This faculty not found!');
+  }
+  const isCourseBeglongToFaculty = await EnrolledCourse.findOne({
+    semesterRegistration,
+    offeredCourse,
+    student,
+    faculty: faculty._id,
+  });
+  if (!isCourseBeglongToFaculty) {
+    throw new appError(
+      httpStatus.FORBIDDEN,
+      'You are forbidden, marke not update!'
+    );
+  }
+
+  const modifiedData: Record<string, number> = {
+    ...courseMarks,
+  };
+  if (courseMarks && Object.keys(courseMarks).length) {
+    for (const [key, value] of Object.entries(courseMarks)) {
+      modifiedData[`courseMarks.${key}`] = value;
+    }
+  }
+
+  const result = await EnrolledCourse.findByIdAndUpdate(
+    isCourseBeglongToFaculty._id,
+    modifiedData,
+    { new: true }
+  );
+
+  return result;
 };
 
 export const EnrolledCourseServices = {

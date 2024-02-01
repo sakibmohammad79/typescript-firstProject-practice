@@ -3,14 +3,17 @@ import express from 'express';
 import validateRequest from '../../middlewars/validateRequest';
 import { AcademicDepartmentValidation } from './department.validation';
 import { AcademicDepartmentControllers } from './department.controller';
+import auth from '../../middlewars/auth';
+import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
 router.post(
   '/create-academic-department',
-  // validateRequest(
-  //   AcademicDepartmentValidation.createAcademicDepartmentValidationSchema
-  // ),
+  auth(USER_ROLE.superAdmin),
+  validateRequest(
+    AcademicDepartmentValidation.createAcademicDepartmentValidationSchema
+  ),
   AcademicDepartmentControllers.createAcademicDepartment
 );
 

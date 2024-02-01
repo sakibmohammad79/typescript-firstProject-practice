@@ -78,8 +78,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
     },
     profileImg: {
       type: String,
-      required: [true, 'Profile Image is required'],
-      trim: true,
+      default: '',
     },
   },
   {

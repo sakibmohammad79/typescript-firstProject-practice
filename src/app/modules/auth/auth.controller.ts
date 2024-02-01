@@ -3,7 +3,6 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendRespons';
 import { authServices } from './auth.service';
 import config from '../../config';
-import { appError } from '../../errors/appError';
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await authServices.loginUser(req.body);

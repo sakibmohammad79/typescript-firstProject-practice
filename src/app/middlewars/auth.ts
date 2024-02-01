@@ -17,10 +17,15 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
     //check if the client send invalid token
     // invalid token - synchronous
-    const decoded = jwt.verify(
-      token,
-      config.jwt_access_token as string
-    ) as JwtPayload;
+    let decoded;
+    try {
+      decoded = jwt.verify(
+        token,
+        config.jwt_access_token as string
+      ) as JwtPayload;
+    } catch (err) {
+      throw new appError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+    }
 
     const { role, userId, iat } = decoded;
 

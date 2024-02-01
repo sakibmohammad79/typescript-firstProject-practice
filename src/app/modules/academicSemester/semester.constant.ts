@@ -22,7 +22,7 @@ export const academicSemesterMonths: TMonths[] = [
 
 export const academicSemesterNames: TacademicSemesterNames[] = [
   'Autumn',
-  'Summar',
+  'Summer',
   'Fall',
 ];
 export const academicSemesterCodes: TacademicSemesterCodes[] = [
@@ -33,6 +33,6 @@ export const academicSemesterCodes: TacademicSemesterCodes[] = [
 
 export const academicSemesterNameCodeMapper: TAcademicSemesterNameCodeMapper = {
   Autumn: '01',
-  Summar: '02',
+  Summer: '02',
   Fall: '03',
 };

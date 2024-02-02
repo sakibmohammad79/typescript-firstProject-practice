@@ -22,14 +22,14 @@ router.get(
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  auth(USER_ROLE.superAdmin),
   validateRequest(updateAdminValidationSchema),
   AdminControllers.updateAdmin
 );
 
 router.delete(
   '/:adminId',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  auth(USER_ROLE.superAdmin),
   AdminControllers.deleteAdmin
 );
 

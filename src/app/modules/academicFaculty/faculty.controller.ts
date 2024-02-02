@@ -21,7 +21,8 @@ const getAllAcademicFaculies = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All academic faculies retrieved successfully!',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 const getSingleAcademicfaculty = catchAsync(async (req, res) => {
